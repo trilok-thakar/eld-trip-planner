@@ -3,15 +3,34 @@ import TripForm from './components/TripForm';
 import RouteMap from './components/RouteMap';
 import ELDLogViewer from './components/ELDLogViewer';
 
-const API_BASE = import.meta.env.VITE_API_URL 
+const API_BASE = import.meta.env.VITE_API_BASE_URL
 
-fetch(`${API_BASE}/api/trip/plan/`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(data)
-});
+const handleSubmit = async (data) => {
+  setLoading(true);
+  setError('');
+
+  try {
+    const res = await fetch(`${API_BASE}/api/trip/plan/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const json = await res.json();
+
+    if (!res.ok || json.error) {
+      throw new Error(json.error || `Error ${res.status}`);
+    }
+
+    setResult({ ...json, start_date: data.start_date });
+    setActiveTab('map');
+
+  } catch (err) {
+    setError(err.message || 'Failed to plan trip.');
+  } finally {
+    setLoading(false);
+  }
+};
 
 function useLeaflet() {
   const [ready, setReady] = useState(!!window.L);
