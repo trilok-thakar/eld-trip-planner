@@ -3,7 +3,15 @@ import TripForm from './components/TripForm';
 import RouteMap from './components/RouteMap';
 import ELDLogViewer from './components/ELDLogViewer';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL 
+
+fetch(`${API_BASE}/api/trip/plan/`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(data)
+});
 
 function useLeaflet() {
   const [ready, setReady] = useState(!!window.L);
