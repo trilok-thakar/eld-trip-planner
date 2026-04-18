@@ -3,8 +3,7 @@ import TripForm from './components/TripForm';
 import RouteMap from './components/RouteMap';
 import ELDLogViewer from './components/ELDLogViewer';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL
-
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function useLeaflet() {
   const [ready, setReady] = useState(!!window.L);
