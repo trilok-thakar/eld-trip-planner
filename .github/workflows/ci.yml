@@ -42,7 +42,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+<<<<<<< HEAD
           node-version: '20'
+=======
+          node-version: 'lts/*'
+>>>>>>> 6dc090d (fix: update node version in CI)
       - name: Install and build
         working-directory: frontend
         run: |
