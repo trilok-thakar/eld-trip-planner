@@ -10,17 +10,21 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         working-directory: backend
         run: pip install -r requirements.txt
+
       - name: Django checks
         working-directory: backend
         run: python manage.py check
+
       - name: Test HOS calculator
         working-directory: backend
         run: |
@@ -38,15 +42,13 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-<<<<<<< HEAD
-          node-version: '20'
-=======
           node-version: 'lts/*'
->>>>>>> 6dc090d (fix: update node version in CI)
+
       - name: Install and build
         working-directory: frontend
         run: |
