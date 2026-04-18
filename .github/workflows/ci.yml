@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+      - name: Django checks
+        working-directory: backend
+        run: python manage.py check
+      - name: Test HOS calculator
+        working-directory: backend
+        run: |
+          python -c "
+          from trip_planner.hos_calculator import HOSCalculator
+          from trip_planner.log_generator import generate_all_logs_svg
+          c = HOSCalculator()
+          p = c.calculate_trip(600,'Chicago IL','Indianapolis IN','Nashville TN',0,distance_to_pickup=180,distance_pickup_to_dropoff=280)
+          assert len(p.daily_logs) >= 1
+          svgs = generate_all_logs_svg(p.daily_logs)
+          assert len(svgs) >= 1
+          print('Backend tests passed')
+          "
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install and build
+        working-directory: frontend
+        run: |
+          npm install
+          npm run build
